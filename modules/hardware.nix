@@ -38,6 +38,7 @@
   environment.systemPackages = with pkgs; [
     amdgpu_top
     ddcutil
+    exfatprogs
     tpm2-tools
     yubikey-manager
   ];
