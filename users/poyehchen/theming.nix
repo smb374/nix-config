@@ -1,5 +1,6 @@
 {
   lib,
+  pkgs,
   inputs,
   ...
 }:
@@ -50,6 +51,57 @@ let
     base15
     base07
   ];
+
+  # qt6ct palette: one color per QPalette::ColorRole, in enum order; qt6ct falls back to
+  # the default palette with fewer than NColorRoles entries. (Basix's generated qt6ct
+  # file has 14 entries in a different order, so it is not used.)
+  qtPalette =
+    {
+      text,
+      highlight,
+      highlightedText,
+    }:
+    lib.concatStringsSep ", " [
+      text # WindowText
+      bgHigh # Button
+      muted # Light
+      bgHighest # Midlight
+      bgAlt # Dark
+      bg # Mid
+      text # Text
+      c.base07 # BrightText
+      text # ButtonText
+      bg # Base
+      bg # Window
+      "#000000" # Shadow
+      highlight # Highlight
+      highlightedText # HighlightedText
+      blue # Link
+      magenta # LinkVisited
+      bgAlt # AlternateBase
+      bg # NoRole
+      bgAlt # ToolTipBase
+      text # ToolTipText
+      muted # PlaceholderText
+      highlight # Accent
+    ];
+  qtNormal = qtPalette {
+    text = fg;
+    highlight = accent;
+    highlightedText = bg;
+  };
+  qtColors = pkgs.writeText "qt6ct-basix.conf" ''
+    [ColorScheme]
+    active_colors=${qtNormal}
+    inactive_colors=${qtNormal}
+    disabled_colors=${
+      qtPalette {
+        text = muted;
+        highlight = bgHigh;
+        highlightedText = muted;
+      }
+    }
+  '';
 
   dmsTheme = {
     inherit (scheme) name;
@@ -283,6 +335,29 @@ in
       "gtk-4.0/gtk.css" = {
         text = gtkCss;
         clobber = true;
+      };
+
+      "qt6ct/qt6ct.conf" = {
+        clobber = true;
+        generator = lib.generators.toINI { };
+        value = {
+          Appearance = {
+            color_scheme_path = "${qtColors}";
+            custom_palette = true;
+            icon_theme = "Papirus-Dark";
+            standard_dialogs = "default";
+            style = "Fusion";
+          };
+          Interface = {
+            activate_item_on_single_click = 1;
+            dialog_buttons_have_icons = 1;
+            menus_have_icons = true;
+            show_shortcuts_in_context_menus = true;
+            toolbutton_style = 4;
+            underline_shortcut = 1;
+            wheel_scroll_lines = 3;
+          };
+        };
       };
     };
   };

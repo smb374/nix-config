@@ -68,6 +68,7 @@ in
       asdf-vm
       proton-vpn
       proton-vpn-cli
+      wl-clipboard-rs
     ];
 
     files = {
