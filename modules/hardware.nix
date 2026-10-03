@@ -35,12 +35,13 @@
   };
   services.gnome.gcr-ssh-agent.enable = false;
 
+  services.udisks2.enable = true;
+
   environment.systemPackages = with pkgs; [
     amdgpu_top
     ddcutil
     exfatprogs
     tpm2-tools
-    udisks
     yubikey-manager
   ];
 }
