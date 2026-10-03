@@ -78,6 +78,8 @@ in
       tree-sitter
       nodejs
       asdf-vm
+      proton-vpn
+      proton-vpn-cli
     ];
 
     files = {
