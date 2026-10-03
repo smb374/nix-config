@@ -61,6 +61,15 @@
   programs.steam.enable = true;
   programs.fish.enable = true;
 
+  # YubiKey via scdaemon's internal CCID driver; gpg-agent is the only SSH agent.
+  hardware.gpgSmartcards.enable = true;
+  programs.gnupg.agent = {
+    enable = true;
+    enableSSHSupport = true;
+    pinentryPackage = pkgs.pinentry-qt;
+  };
+  services.gnome.gcr-ssh-agent.enable = false;
+
   fonts.packages = with pkgs; [
     noto-fonts
     noto-fonts-cjk-sans
