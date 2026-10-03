@@ -33,8 +33,6 @@ in
 
   hjem.users.poyehchen = {
     packages = with pkgs; [
-      neovim
-      git
       kitty
       brave-origin
       inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.default
@@ -46,20 +44,11 @@ in
       (lib.hiPrio gcc)
       cmake
       mold
-      lshw
       uv
       go
       bun
 
-      # Archives
-      unrar
-      unzip
-      zip
-      unar
-
       # CLI
-      ripgrep
-      fd
       bat
       dua
       eza
@@ -67,7 +56,6 @@ in
       btop-rocm
       imv
       imagemagick
-      jq
       yq-go
       just
       nmap

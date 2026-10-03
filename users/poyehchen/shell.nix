@@ -41,6 +41,7 @@ in
         source ${hjemUser.environment.loadEnv}
       '';
       "fish/config.fish".source = "${dotfiles}/fish/config.fish";
+      "kitty/kitty.conf".source = "${dotfiles}/kitty/kitty.conf";
       "tmux/tmux.conf".source = "${dotfiles}/tmux/tmux.conf";
     };
   };

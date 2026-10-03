@@ -1,24 +1,4 @@
 { pkgs, ... }:
-let
-  # qt6ct with the AUR qt6ct-kde patch: KDE color schemes and icon engine support.
-  qt6ct-kde = pkgs.qt6Packages.qt6ct.overrideAttrs (old: {
-    pname = "qt6ct-kde";
-    patches = (old.patches or [ ]) ++ [
-      (pkgs.fetchurl {
-        url = "https://raw.githubusercontent.com/archlinux/aur/8c1003e13b7e7545e717273e0716f095f195bd13/qt6ct-shenanigans.patch";
-        hash = "sha256-uqsrcUrUkN46Eu3V1OwPYiPt7QNNZqaUmJ50a4bR9CA=";
-      })
-    ];
-    buildInputs =
-      old.buildInputs
-      ++ (with pkgs.kdePackages; [
-        kconfig
-        kcolorscheme
-        kiconthemes
-        qtdeclarative
-      ]);
-  });
-in
 {
   services.displayManager.ly.enable = true;
   programs.niri.enable = true;
@@ -49,13 +29,16 @@ in
     maple-mono.NL-NF-CN
   ];
 
-  # Theming: DMS patches adw-gtk3 and writes qt6ct colors from matugen.
+  # Theming: colors come from the Basix scheme in users/poyehchen/theming.nix.
+  # Qt follows the GTK3 theme (adw-gtk3 + Basix gtk.css) via qtbase's built-in gtk3 platform theme.
   qt.enable = true;
-  environment.variables.QT_QPA_PLATFORMTHEME = "qt6ct";
+  environment.variables = {
+    QT_QPA_PLATFORMTHEME = "gtk3";
+    QT_QPA_PLATFORMTHEME_QT6 = "gtk3";
+  };
   environment.systemPackages = with pkgs; [
     adw-gtk3
     papirus-icon-theme
-    qt6ct-kde
     kdePackages.qqc2-desktop-style
     gearlever
   ];

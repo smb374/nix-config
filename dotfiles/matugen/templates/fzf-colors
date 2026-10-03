@@ -1,5 +1,0 @@
---color=fg:{{colors.on_surface.dark.hex}},bg:-1,hl:{{colors.primary.dark.hex}}
---color=fg+:{{colors.on_surface.dark.hex}},bg+:{{colors.surface_container_high.dark.hex}},hl+:{{colors.primary.dark.hex}}
---color=info:{{colors.secondary.dark.hex}},prompt:{{colors.secondary.dark.hex}},pointer:{{colors.tertiary.dark.hex}}
---color=marker:{{colors.tertiary.dark.hex}},spinner:{{colors.tertiary.dark.hex}},header:{{colors.primary.dark.hex}}
---color=selected-bg:{{colors.surface_container_highest.dark.hex}},border:{{colors.outline_variant.dark.hex}},label:{{colors.on_surface.dark.hex}}

@@ -1,5 +1,42 @@
 {
   "nodes": {
+    "basix": {
+      "inputs": {
+        "flake-compat": "flake-compat",
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1791018085,
+        "narHash": "sha256-housjVTjhgLBWUlJPR1ox4tRk0l2XjH1LqJCGsRrX4I=",
+        "owner": "NotAShelf",
+        "repo": "Basix",
+        "rev": "a0533460f08ecc0f06126b2540e5502ad2c92256",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NotAShelf",
+        "repo": "Basix",
+        "type": "github"
+      }
+    },
+    "flake-compat": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1767039857,
+        "narHash": "sha256-vNpUSpF5Nuw8xvDLj2KCwwksIbjua2LZCqhV1LNRDns=",
+        "owner": "edolstra",
+        "repo": "flake-compat",
+        "rev": "5edf11c44bc78a0d334f6334cdaf7d60d732daab",
+        "type": "github"
+      },
+      "original": {
+        "owner": "edolstra",
+        "repo": "flake-compat",
+        "type": "github"
+      }
+    },
     "hjem": {
       "inputs": {
         "nixpkgs": [
@@ -75,6 +112,7 @@
     },
     "root": {
       "inputs": {
+        "basix": "basix",
         "hjem": "hjem",
         "nix-flatpak": "nix-flatpak",
         "nixpkgs": "nixpkgs",

@@ -12,6 +12,10 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nix-flatpak.url = "github:gmodena/nix-flatpak/?ref=latest";
+    basix = {
+      url = "github:NotAShelf/Basix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
