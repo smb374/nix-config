@@ -11,17 +11,25 @@
       url = "github:0xc000022070/zen-browser-flake";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nix-flatpak.url = "github:gmodena/nix-flatpak/?ref=latest";
   };
 
   outputs =
-    { nixpkgs, hjem, ... }@inputs:
+    {
+      nixpkgs,
+      hjem,
+      nix-flatpak,
+      ...
+    }@inputs:
     {
       nixosConfigurations.smb374-nix = nixpkgs.lib.nixosSystem {
         specialArgs = { inherit inputs; };
         modules = [
           hjem.nixosModules.default
+          nix-flatpak.nixosModules.nix-flatpak
           ./hosts/smb374-nix
-          ./users/poyehchen.nix
+          ./modules
+          ./users/poyehchen
         ];
       };
       formatter.x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.nixfmt-tree;

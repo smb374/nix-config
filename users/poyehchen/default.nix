@@ -1,7 +1,9 @@
 {
+  config,
   lib,
   pkgs,
   inputs,
+  dotfiles,
   ...
 }:
 let
@@ -9,6 +11,26 @@ let
   gpgFingerprint = "225E808C4DFA1DFA3CF686570A507FC2325D77EA";
 in
 {
+  imports = [
+    ./shell.nix
+    ./theming.nix
+  ];
+
+  # Out-of-store root for stowed dotfiles: edits in the repo apply without a rebuild.
+  _module.args.dotfiles = "${config.hjem.users.poyehchen.directory}/nix-config/dotfiles";
+
+  users.users.poyehchen = {
+    isNormalUser = true;
+    uid = 1000;
+    shell = pkgs.fish;
+    extraGroups = [
+      "wheel"
+      "networkmanager"
+      "i2c"
+      "tss"
+    ];
+  };
+
   hjem.users.poyehchen = {
     packages = with pkgs; [
       neovim
@@ -16,9 +38,48 @@ in
       kitty
       brave-origin
       inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.default
+
+      # Dev
+      gdb
+      gef
+      clang
+      (lib.hiPrio gcc)
+      cmake
+      mold
+      lshw
+      uv
+      go
+      bun
+
+      # Archives
+      unrar
+      unzip
+      zip
+      unar
+
+      # CLI
+      ripgrep
+      fd
+      bat
+      dua
+      eza
+      ffmpeg
+      btop-rocm
+      imv
+      imagemagick
+      jq
+      yq-go
+      just
+      nmap
+      nmon
+      geoip
+      geolite-legacy
+      lxqt.pavucontrol-qt
     ];
 
     files = {
+      ".editorconfig".source = "${dotfiles}/editorconfig";
+
       # gpg refuses a group/world-readable homedir.
       ".gnupg" = {
         type = "directory";
@@ -68,7 +129,7 @@ in
       wantedBy = [ "default.target" ];
       serviceConfig.Type = "oneshot";
       script = ''
-        ${lib.getExe pkgs.gnupg} --batch --import ${../keys/0x0A507FC2325D77EA.asc}
+        ${lib.getExe pkgs.gnupg} --batch --import ${../../keys/0x0A507FC2325D77EA.asc}
         echo "${gpgFingerprint}:6:" | ${lib.getExe pkgs.gnupg} --batch --import-ownertrust
       '';
     };

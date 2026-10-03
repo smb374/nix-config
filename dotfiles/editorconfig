@@ -1,0 +1,23 @@
+root = true
+
+# Default: 4 spaces (also C/C++, Haskell, ...).
+[*]
+charset = utf-8
+end_of_line = lf
+indent_style = space
+indent_size = 4
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+# Tabs
+[{Makefile,Info.plist,*.go,*.odin,*.S}]
+indent_style = tab
+
+# 2 spaces
+[{meson.build,*.{cabal,css,dart,ex,exs,fnl,gleam,html,js,json,jsx,lua,md,ml,mli,nix,org,proto,rb,scss,svelte,tf,ts,tsx,typ,xml,yaml,yml,yuck}}]
+indent_size = 2
+
+# Emacs Lisp: leave to the editor.
+[*.{el,emacs}]
+indent_style = unset
+indent_size = unset
