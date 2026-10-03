@@ -55,6 +55,7 @@ in
   environment.systemPackages = with pkgs; [
     adw-gtk3
     papirus-icon-theme
+    vanilla-dmz
     qt6ct-kde
     kdePackages.qqc2-desktop-style
     gearlever
