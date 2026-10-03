@@ -75,6 +75,9 @@ in
       geoip
       geolite-legacy
       lxqt.pavucontrol-qt
+      tree-sitter
+      nodejs
+      asdf-vm
     ];
 
     files = {
