@@ -40,6 +40,7 @@
     ddcutil
     exfatprogs
     tpm2-tools
+    udisks
     yubikey-manager
   ];
 }
