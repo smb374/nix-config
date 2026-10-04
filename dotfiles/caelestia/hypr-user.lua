@@ -17,3 +17,8 @@ hl.monitor({
   scale = 1.5,
 })
 hl.monitor({ output = "", mode = "preferred", position = "auto", scale = 1 })
+
+hl.bind("SUPER + mouse_left", hl.dsp.layout("focus l"))
+hl.bind("SUPER + mouse_right", hl.dsp.layout("focus r"))
+hl.bind("SUPER + SHIFT + mouse_up", hl.dsp.layout("focus l"))
+hl.bind("SUPER + SHIFT + mouse_down", hl.dsp.layout("focus r"))
