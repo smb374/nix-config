@@ -154,5 +154,7 @@
     jq
 
     squeezelite
+    efibootmgr
+    btrfs-progs
   ];
 }
