@@ -160,5 +160,6 @@
     playerctl
     iotop
     nmon
+    procps
   ];
 }
