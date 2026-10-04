@@ -38,6 +38,10 @@ in
     uv
     go
     bun
+    odin
+    ols
+    nil
+    nixfmt-tree
 
     # CLI
     bat

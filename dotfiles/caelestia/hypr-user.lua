@@ -4,8 +4,8 @@
 -- Scrolling layout; the dots' general.lua already tunes its `scrolling` section.
 hl.config({ general = { layout = "scrolling" } })
 
--- Switch workspaces vertically, like niri; the dots' animations.lua sets the rest of this leaf.
-hl.animation({ leaf = "workspaces", enabled = true, speed = 5, bezier = "standard", style = "slidevert" })
+-- Switch workspaces vertically, like niri, and faster than the dots' speed 5 (speed is in 100 ms units).
+hl.animation({ leaf = "workspaces", enabled = true, speed = 3, bezier = "standard", style = "slidevert" })
 
 -- The dots' kill/restart binds run `qs -c caelestia`, which the nixpkgs shell does not provide.
 hl.unbind("CTRL + SUPER + SHIFT + R")
