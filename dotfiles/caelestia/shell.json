@@ -8,19 +8,28 @@
         "idle": {
             "timeouts": [
                 {
-                    "timeout": 180,
-                    "idleAction": "lock"
+                    "enabled": true,
+                    "idleAction": "lock",
+                    "inhibitWhenAudio": false,
+                    "inhibitWhenCharging": false,
+                    "respectInhibitors": true,
+                    "timeout": 180
                 },
                 {
-                    "timeout": 300,
+                    "enabled": true,
                     "idleAction": "dpms off",
-                    "returnAction": "dpms on"
+                    "inhibitWhenAudio": false,
+                    "inhibitWhenCharging": false,
+                    "respectInhibitors": true,
+                    "returnAction": "dpms on",
+                    "timeout": 300
                 }
             ]
         }
     },
     "services": {
         "clockFormat": "TwentyFourHour",
+        "defaultPlayer": "squeezelite",
         "weatherUnits": "Celsius"
     }
 }
