@@ -158,5 +158,7 @@
     btrfs-progs
     iw
     playerctl
+    iotop
+    nmon
   ];
 }
