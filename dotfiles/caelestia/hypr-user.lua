@@ -9,3 +9,11 @@ hl.unbind("CTRL + SUPER + SHIFT + R")
 hl.unbind("CTRL + SUPER + ALT + R")
 hl.bind("CTRL + SUPER + SHIFT + R", hl.dsp.exec_cmd("caelestia shell -k"), { release = true })
 hl.bind("CTRL + SUPER + ALT + R", hl.dsp.exec_cmd("caelestia shell -r"), { release = true })
+
+-- Monitors
+hl.monitor({
+  output = "desc:BNQ BenQ EL2870U R5M00386SL0",
+  mode = " 3840x2160",
+  scale = 1.5,
+})
+hl.monitor({ output = "", mode = "preferred", position = "auto", scale = 1 })
