@@ -152,5 +152,7 @@
     ripgrep
     fd
     jq
+
+    squeezelite
   ];
 }
