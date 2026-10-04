@@ -156,5 +156,6 @@
     squeezelite
     efibootmgr
     btrfs-progs
+    iw
   ];
 }

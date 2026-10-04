@@ -6,7 +6,7 @@
     defaultNetwork.settings.dns_enabled = true;
   };
   # Resolve short image names (e.g. `podman pull alpine`) against Docker Hub.
-  virtualisation.containers.registries.search = [ "docker.io" ];
+  virtualisation.containers.registries.settings.unqualified-search-registries = [ "docker.io" ];
   environment.systemPackages = [ pkgs.podman-compose ];
 
   # Trash, MTP, SMB, etc. for Thunar; thumbnails.
