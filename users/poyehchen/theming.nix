@@ -98,8 +98,8 @@ in
       # Select with `color_theme = "basix"` in btop.conf.
       "btop/themes/basix.theme".source = render "btop.theme";
 
-      # The Caelestia CLI's gtk writer is off (hyprland.nix); clobber replaces files
-      # that DMS left behind on first activation.
+      # The Caelestia CLI's gtk writer is off (hyprland.nix); clobber replaces any
+      # existing unmanaged file.
       "gtk-3.0/gtk.css" = {
         source = gtkCss;
         clobber = true;

@@ -69,7 +69,6 @@
     vanilla-dmz
     qtengine
     darkly
-    kdePackages.qqc2-desktop-style
     gearlever
 
     # Commands the Caelestia dots run.

@@ -24,6 +24,11 @@ return {
   kbMoveWinToWs              = "SUPER + ALT",
   kbMoveWinToWsGroup         = "CTRL + SUPER + ALT",
 
+  -- niri-style: SUPER + F maximizes the column (layout-aware "maximized" in the scrolling
+  -- layout), SUPER + SHIFT + F is real fullscreen.
+  kbWindowBorderedFullscreen = "SUPER + F",
+  kbWindowFullscreen         = "SUPER + SHIFT + F",
+
   -- Apps
   kbTerminal                 = "SUPER + Return",
 
