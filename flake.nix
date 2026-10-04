@@ -16,6 +16,11 @@
       url = "github:NotAShelf/Basix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    # Caelestia dots: Hyprland Lua config, linked file by file into ~/.config/hypr.
+    caelestia-dots = {
+      url = "github:caelestia-dots/caelestia";
+      flake = false;
+    };
   };
 
   outputs =

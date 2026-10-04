@@ -1,28 +1,38 @@
 { pkgs, ... }:
-let
-  # qt6ct with the AUR qt6ct-kde patch: KDE color schemes and icon engine support.
-  qt6ct-kde = pkgs.qt6Packages.qt6ct.overrideAttrs (old: {
-    pname = "qt6ct-kde";
-    patches = (old.patches or [ ]) ++ [
-      (pkgs.fetchurl {
-        url = "https://raw.githubusercontent.com/archlinux/aur/8c1003e13b7e7545e717273e0716f095f195bd13/qt6ct-shenanigans.patch";
-        hash = "sha256-uqsrcUrUkN46Eu3V1OwPYiPt7QNNZqaUmJ50a4bR9CA=";
-      })
-    ];
-    buildInputs =
-      old.buildInputs
-      ++ (with pkgs.kdePackages; [
-        kconfig
-        kcolorscheme
-        kiconthemes
-        qtdeclarative
-      ]);
-  });
-in
 {
   services.displayManager.ly.enable = true;
-  programs.niri.enable = true;
-  programs.dms-shell.enable = true;
+
+  # Hyprland + Caelestia shell. The shell starts from the dots' Hyprland config.
+  # UWSM gives a systemd graphical session: user services and XDG autostart (fcitx5) run there.
+  programs.hyprland = {
+    enable = true;
+    withUWSM = true;
+  };
+  # This file replaces Hyprland's packaged hyprland-portals.conf, so it restates the default.
+  xdg.portal.config.hyprland = {
+    default = [
+      "hyprland"
+      "gtk"
+    ];
+    "org.freedesktop.impl.portal.Secret" = [ "gnome-keyring" ];
+  };
+  services.gnome.gnome-keyring.enable = true;
+  # Polkit agent as a user service; the dots' polkit-gnome exec uses an Arch path.
+  security.soteria.enable = true;
+  services.power-profiles-daemon.enable = true;
+  services.upower.enable = true;
+
+  # Night light: the dots exec gammastep, which reads the location from geoclue.
+  services.geoclue2 = {
+    enable = true;
+    appConfig.gammastep = {
+      isAllowed = true;
+      isSystem = false;
+    };
+  };
+
+  # The dots' paste-latest-clipboard bind types through ydotool.
+  programs.ydotool.enable = true;
 
   services.pipewire = {
     enable = true;
@@ -47,18 +57,28 @@ in
     noto-fonts-color-emoji
     maple-mono.NF-CN
     maple-mono.NL-NF-CN
+    nerd-fonts.jetbrains-mono
   ];
 
   # Theming: colors come from the Basix scheme in users/poyehchen/theming.nix.
   qt.enable = true;
-  environment.variables.QT_QPA_PLATFORMTHEME = "qt6ct";
+  environment.variables.QT_QPA_PLATFORMTHEME = "qtengine";
   environment.systemPackages = with pkgs; [
     adw-gtk3
     papirus-icon-theme
     vanilla-dmz
-    qt6ct-kde
+    qtengine
+    darkly
     kdePackages.qqc2-desktop-style
     gearlever
+
+    # Commands the Caelestia dots run.
+    caelestia-shell
+    caelestia-cli
+    cliphist
+    trash-cli
+    hyprpicker
+    gammastep
   ];
 
   programs.thunar = {

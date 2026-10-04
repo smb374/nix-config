@@ -14,6 +14,7 @@ in
   imports = [
     ./shell.nix
     ./theming.nix
+    ./hyprland.nix
   ];
 
   # Out-of-store root for stowed dotfiles: edits in the repo apply without a rebuild.
@@ -28,12 +29,14 @@ in
       "networkmanager"
       "i2c"
       "tss"
+      "ydotool"
     ];
   };
 
   hjem.users.poyehchen = {
     packages = with pkgs; [
       kitty
+      foot
       brave-origin
       inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.default
 
@@ -68,7 +71,8 @@ in
       asdf-vm
       proton-vpn
       proton-vpn-cli
-      wl-clipboard-rs
+      # wl-clipboard-rs lacks `wl-paste --watch` (cliphist) until its next nixpkgs release.
+      wl-clipboard
     ];
 
     files = {

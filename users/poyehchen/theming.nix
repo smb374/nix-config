@@ -7,6 +7,8 @@
 let
   # Pick any scheme from github:NotAShelf/Basix (json/base16 or json/base24).
   # base24 supplies distinct bright ANSI colors (base12-base17).
+  # The Caelestia shell and Hyprland borders use the CLI's own scheme; keep it matching:
+  #   caelestia scheme set -n catppuccin -f mocha -m dark
   slug = "catppuccin-mocha";
   scheme = inputs.basix.schemeData.base24.${slug};
 
@@ -55,37 +57,9 @@ let
         mustache "$dataPath" ${./templates + "/${name}.mustache"} > "$out"
       '';
 
-  # qt6ct palette: one color per QPalette::ColorRole, in enum order (WindowText, Button,
-  # Light, Midlight, Dark, Mid, Text, BrightText, ButtonText, Base, Window, Shadow,
-  # Highlight, HighlightedText, Link, LinkVisited, AlternateBase, NoRole, ToolTipBase,
-  # ToolTipText, PlaceholderText, Accent). qt6ct falls back to the default palette with
-  # fewer entries, so Basix's 14-entry qt6ct file is not used.
-  qtColors = render "qt6ct-colors.conf";
+  # KDE color scheme for qtengine, laid out like the Caelestia CLI's qtdark.colors.
+  qtColors = render "kde.colors";
   gtkCss = render "gtk.css";
-
-  dmsTheme = with roles; {
-    inherit (scheme) name;
-    primary = accent;
-    primaryText = bg;
-    primaryContainer = bgHigh;
-    inherit secondary;
-    surfaceTint = accent;
-    surface = bgAlt;
-    surfaceText = fg;
-    surfaceVariant = bg;
-    surfaceVariantText = fg;
-    background = bg;
-    backgroundText = fg;
-    outline = muted;
-    surfaceContainerLowest = bgAlt;
-    surfaceContainerLow = bgAlt;
-    surfaceContainer = bg;
-    surfaceContainerHigh = bgHigh;
-    surfaceContainerHighest = bgHighest;
-    error = red;
-    warning = orange;
-    info = blue;
-  };
 in
 {
   # Read by GTK on Wayland and by xdg-desktop-portal (dark-mode preference).
@@ -103,7 +77,7 @@ in
 
   hjem.users.poyehchen = {
     environment.sessionVariables = {
-      # bat's "ansi" theme uses the terminal palette set in kitty below.
+      # bat's "ansi" theme uses the terminal palette set in foot and kitty below.
       BAT_THEME = "ansi";
       FZF_DEFAULT_OPTS =
         with roles;
@@ -117,19 +91,15 @@ in
     };
 
     xdg.config.files = {
+      "foot/basix-colors.ini".source = render "foot.ini";
       "kitty/basix-theme.conf".source = render "kitty.conf";
       "tmux/basix-colors.conf".source = render "tmux-colors.conf";
       "fish/themes/basix.theme".source = render "fish.theme";
       # Select with `color_theme = "basix"` in btop.conf.
       "btop/themes/basix.theme".source = render "btop.theme";
 
-      # Select in DMS: Settings → Theme & Colors → Custom → this file.
-      "DankMaterialShell/themes/basix.json".text = builtins.toJSON {
-        dark = dmsTheme;
-        light = dmsTheme;
-      };
-
-      # DMS wrote these before; clobber replaces its files on first activation.
+      # The Caelestia CLI's gtk writer is off (hyprland.nix); clobber replaces files
+      # that DMS left behind on first activation.
       "gtk-3.0/gtk.css" = {
         source = gtkCss;
         clobber = true;
@@ -139,26 +109,27 @@ in
         clobber = true;
       };
 
-      "qt6ct/qt6ct.conf" = {
-        clobber = true;
-        generator = lib.generators.toINI { };
-        value = {
-          Appearance = {
-            color_scheme_path = "${qtColors}";
-            custom_palette = true;
-            icon_theme = "Papirus-Dark";
-            standard_dialogs = "default";
-            style = "Fusion";
+      # Read by the qtengine platform theme (QT_QPA_PLATFORMTHEME in modules/desktop.nix).
+      "qtengine/config.json".text = builtins.toJSON {
+        theme = {
+          colorScheme = "${qtColors}";
+          iconTheme = "Papirus-Dark";
+          style = "Darkly";
+          font = {
+            family = "Sans Serif";
+            size = 12;
+            weight = -1;
           };
-          Interface = {
-            activate_item_on_single_click = 1;
-            dialog_buttons_have_icons = 1;
-            menus_have_icons = true;
-            show_shortcuts_in_context_menus = true;
-            toolbutton_style = 4;
-            underline_shortcut = 1;
-            wheel_scroll_lines = 3;
+          fontFixed = {
+            family = "Monospace";
+            size = 12;
+            weight = -1;
           };
+        };
+        misc = {
+          menusHaveIcons = true;
+          singleClickActivate = true;
+          shortcutsForContextMenus = true;
         };
       };
     };
