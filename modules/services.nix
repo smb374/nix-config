@@ -33,7 +33,7 @@
     image = "docker.io/lmscommunity/lyrionmusicserver:latest";
     volumes = [
       "/var/lib/lms/config:/config:rw"
-      "/media:/music:ro"
+      "/media/music:/music:ro"
       "/var/lib/lms/playlist:/playlist:rw"
       "/etc/localtime:/etc/localtime:ro"
     ];
