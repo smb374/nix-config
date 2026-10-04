@@ -1,25 +1,13 @@
+# NixOS side of the user: account, system-level programs, and the Hjem wiring.
+# Everything under $HOME lives in ./home, which also works with the standalone `hjem` CLI
+# (hjemConfigurations.poyehchen in flake.nix).
 {
-  config,
   lib,
   pkgs,
   inputs,
-  dotfiles,
   ...
 }:
-let
-  gpgKey = "0A507FC2325D77EA";
-  gpgFingerprint = "225E808C4DFA1DFA3CF686570A507FC2325D77EA";
-in
 {
-  imports = [
-    ./shell.nix
-    ./theming.nix
-    ./hyprland.nix
-  ];
-
-  # Out-of-store root for stowed dotfiles: edits in the repo apply without a rebuild.
-  _module.args.dotfiles = "${config.hjem.users.poyehchen.directory}/nix-config/dotfiles";
-
   users.users.poyehchen = {
     isNormalUser = true;
     uid = 1000;
@@ -33,103 +21,32 @@ in
     ];
   };
 
-  hjem.users.poyehchen = {
-    packages = with pkgs; [
-      kitty
-      foot
-      brave-origin
-      inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.default
+  hjem.specialArgs = { inherit inputs; };
+  hjem.users.poyehchen.imports = [ ./home ];
 
-      # Dev
-      gdb
-      gef
-      clang
-      (lib.hiPrio gcc)
-      cmake
-      mold
-      uv
-      go
-      bun
+  programs.fish.enable = true;
+  # fish only reads vendor plugin dirs linked into the system profile.
+  environment.systemPackages = with pkgs.fishPlugins; [
+    pure
+    fzf-fish
+  ];
 
-      # CLI
-      bat
-      dua
-      eza
-      ffmpeg
-      btop-rocm
-      imv
-      imagemagick
-      yq-go
-      just
-      nmap
-      nmon
-      geoip
-      geolite-legacy
-      lxqt.pavucontrol-qt
-      tree-sitter
-      nodejs
-      asdf-vm
-      proton-vpn
-      proton-vpn-cli
-      # wl-clipboard-rs lacks `wl-paste --watch` (cliphist) until its next nixpkgs release.
-      wl-clipboard
-    ];
-
-    files = {
-      ".editorconfig".source = "${dotfiles}/editorconfig";
-
-      # gpg refuses a group/world-readable homedir.
-      ".gnupg" = {
-        type = "directory";
-        permissions = "700";
-      };
-      ".gnupg/gpg.conf".text = ''
-        armor
-        cert-digest-algo SHA512
-        charset utf-8
-        default-preference-list SHA512 SHA384 SHA256 AES256 AES192 AES ZLIB BZIP2 ZIP Uncompressed
-        fixed-list-mode
-        keyid-format 0xlong
-        list-options show-uid-validity
-        no-comments
-        no-emit-version
-        no-greeting
-        no-symkey-cache
-        personal-cipher-preferences AES256 AES192 AES
-        personal-compress-preferences ZLIB BZIP2 ZIP Uncompressed
-        personal-digest-preferences SHA512 SHA384 SHA256
-        require-cross-certification
-        s2k-cipher-algo AES256
-        s2k-digest-algo SHA512
-        throw-keyids
-        use-agent
-        verify-options show-uid-validity
-        with-fingerprint
-      '';
-    };
-
-    xdg.config.files."git/config" = {
-      generator = lib.generators.toGitINI;
-      value = {
-        user = {
-          name = "Po-Yeh Chen";
-          email = "snlk374@gmail.com";
-          signingKey = gpgKey;
-        };
-        tag.gpgSign = true;
-        init.defaultBranch = "main";
-      };
-    };
-
-    # Import the public key and mark it ultimately trusted; both steps are idempotent.
-    systemd.services.gpg-import-keys = {
-      description = "Import GnuPG public keys";
-      wantedBy = [ "default.target" ];
-      serviceConfig.Type = "oneshot";
-      script = ''
-        ${lib.getExe pkgs.gnupg} --batch --import ${../../keys/0x0A507FC2325D77EA.asc}
-        echo "${gpgFingerprint}:6:" | ${lib.getExe pkgs.gnupg} --batch --import-ownertrust
-      '';
-    };
+  programs.direnv.enable = true;
+  programs.zoxide = {
+    enable = true;
+    flags = [ "--cmd cd" ];
   };
+
+  # Read by GTK on Wayland and by xdg-desktop-portal (dark-mode preference).
+  programs.dconf.profiles.user.databases = [
+    {
+      settings."org/gnome/desktop/interface" = {
+        gtk-theme = "adw-gtk3-dark";
+        icon-theme = "Papirus-Dark";
+        color-scheme = "prefer-dark";
+        cursor-theme = "Vanilla-DMZ";
+        cursor-size = lib.gvariant.mkInt32 24;
+      };
+    }
+  ];
 }

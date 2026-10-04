@@ -18,7 +18,7 @@ let
   );
 in
 {
-  hjem.users.poyehchen.xdg.config.files = hyprFiles // {
+  xdg.config.files = hyprFiles // {
     # Personal overrides, loaded by the dots' hyprland.lua.
     "caelestia/hypr-vars.lua".source = "${dotfiles}/caelestia/hypr-vars.lua";
     "caelestia/hypr-user.lua".source = "${dotfiles}/caelestia/hypr-user.lua";

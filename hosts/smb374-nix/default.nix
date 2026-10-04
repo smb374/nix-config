@@ -29,6 +29,10 @@
     }
   ];
 
+  # NVMe root (ext4): skip access-time writes. TRIM runs weekly via services.fstrim
+  # (enabled by default) instead of the `discard` mount option.
+  fileSystems."/".options = [ "noatime" ];
+
   fileSystems."/media" = {
     device = "/dev/disk/by-uuid/F6A6-5D2F";
     fsType = "exfat";

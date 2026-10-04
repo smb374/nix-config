@@ -30,6 +30,17 @@
       nix-flatpak,
       ...
     }@inputs:
+    let
+      system = "x86_64-linux";
+      mkHjemStandalone = import ./lib/hjem-standalone.nix {
+        inherit nixpkgs hjem;
+        pkgs = import nixpkgs {
+          inherit system;
+          config.allowUnfree = true;
+        };
+        specialArgs = { inherit inputs; };
+      };
+    in
     {
       nixosConfigurations.smb374-nix = nixpkgs.lib.nixosSystem {
         specialArgs = { inherit inputs; };
@@ -41,6 +52,14 @@
           ./users/poyehchen
         ];
       };
-      formatter.x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.nixfmt-tree;
+
+      # Standalone Hjem (non-NixOS hosts): `hjem standalone switch --flake .`
+      hjemConfigurations.poyehchen = mkHjemStandalone {
+        user = "poyehchen";
+        directory = "/home/poyehchen";
+        modules = [ ./users/poyehchen/home ];
+      };
+
+      formatter.${system} = nixpkgs.legacyPackages.${system}.nixfmt-tree;
     };
 }
