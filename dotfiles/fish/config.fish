@@ -1,5 +1,7 @@
-# Session variables (SHELL, EDITOR, GOPATH, ...) come from Hjem via conf.d/hjem-env.fish.
+# Session variables (EDITOR, GOPATH, ...) come from Hjem via conf.d/hjem-env.fish.
 # SSH_AUTH_SOCK, GPG_TTY, direnv and zoxide hooks come from NixOS.
+
+set -gx SHELL (which fish)
 
 fish_add_path -pPm $HOME/.local/bin $HOME/.bun/bin $HOME/.cargo/bin $GOPATH/bin
 

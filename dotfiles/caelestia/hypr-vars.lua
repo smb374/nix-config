@@ -6,7 +6,7 @@ return {
   editor                     = "foot nvim",
   audioSettings              = "pavucontrol-qt",
 
-  -- Matches the dconf cursor in users/poyehchen/theming.nix.
+  -- Matches the dconf cursor in users/poyehchen/default.nix.
   cursorTheme                = "Vanilla-DMZ",
 
   -- Default is suspend-then-hibernate; this system has no hibernation resume device.

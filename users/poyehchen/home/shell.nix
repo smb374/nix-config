@@ -1,5 +1,6 @@
 {
   config,
+  lib,
   pkgs,
   dotfiles,
   ...
@@ -11,7 +12,7 @@
   ];
 
   environment.sessionVariables = {
-    SHELL = "/run/current-system/sw/bin/fish";
+    # A store path works on NixOS and standalone hosts; the reference also keeps fish installed.
     EDITOR = "nvim";
     VISUAL = "nvim";
     GOPATH = "$HOME/.local/lib/go";
