@@ -102,12 +102,12 @@ in
         iconTheme = "Papirus-Dark";
         style = "Darkly";
         font = {
-          family = "Sans Serif";
+          family = "Noto Sans CJK TC";
           size = 12;
           weight = -1;
         };
         fontFixed = {
-          family = "Monospace";
+          family = "Maple Mono NL NF CN";
           size = 12;
           weight = -1;
         };
