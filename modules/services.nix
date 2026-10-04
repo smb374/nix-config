@@ -1,4 +1,9 @@
-{ lib, pkgs, ... }:
+{
+  lib,
+  pkgs,
+  inputs,
+  ...
+}:
 {
   virtualisation.podman = {
     enable = true;
@@ -23,7 +28,21 @@
     wantedBy = [ "default.target" ];
     after = [ "pipewire.service" ];
     serviceConfig = {
-      ExecStart = "${lib.getExe pkgs.squeezelite} -n smb374-nix -o pipewire -Z 384000";
+      ExecStart = lib.escapeShellArgs [
+        (lib.getExe inputs.mprisqueeze.packages.${pkgs.stdenv.hostPlatform.system}.default)
+        "-p"
+        "squeezelite"
+        "--"
+        (lib.getExe pkgs.squeezelite)
+        "-n"
+        "{name}"
+        "-s"
+        "{server}"
+        "-o"
+        "pipewire"
+        "-Z"
+        "384000"
+      ];
       Restart = "on-failure";
     };
   };

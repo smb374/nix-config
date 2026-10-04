@@ -21,6 +21,11 @@
       url = "github:caelestia-dots/caelestia";
       flake = false;
     };
+    # MPRIS wrapper for squeezelite (modules/services.nix).
+    mprisqueeze = {
+      url = "github:jecaro/mprisqueeze";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =

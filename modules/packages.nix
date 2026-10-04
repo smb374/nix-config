@@ -157,5 +157,6 @@
     efibootmgr
     btrfs-progs
     iw
+    playerctl
   ];
 }

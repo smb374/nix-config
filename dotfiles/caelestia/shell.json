@@ -1,0 +1,26 @@
+{
+    "appearance": {
+        "transparency": {
+            "enabled": false
+        }
+    },
+    "general": {
+        "idle": {
+            "timeouts": [
+                {
+                    "timeout": 180,
+                    "idleAction": "lock"
+                },
+                {
+                    "timeout": 300,
+                    "idleAction": "dpms off",
+                    "returnAction": "dpms on"
+                }
+            ]
+        }
+    },
+    "services": {
+        "clockFormat": "TwentyFourHour",
+        "weatherUnits": "Celsius"
+    }
+}

@@ -22,6 +22,8 @@ in
     # Personal overrides, loaded by the dots' hyprland.lua.
     "caelestia/hypr-vars.lua".source = "${dotfiles}/caelestia/hypr-vars.lua";
     "caelestia/hypr-user.lua".source = "${dotfiles}/caelestia/hypr-user.lua";
+    # Out-of-store link: the shell's settings UI writes this file back into the repo.
+    "caelestia/shell.json".source = "${dotfiles}/caelestia/shell.json";
 
     "caelestia/cli.json".text = builtins.toJSON {
       # Basix (theming.nix) owns these outputs; the CLI only themes Hyprland and the shell.
