@@ -13,6 +13,10 @@ hl.unbind("CTRL + SUPER + ALT + R")
 hl.bind("CTRL + SUPER + SHIFT + R", hl.dsp.exec_cmd("caelestia shell -k"), { release = true })
 hl.bind("CTRL + SUPER + ALT + R", hl.dsp.exec_cmd("caelestia shell -r"), { release = true })
 
+-- The dots send only discord|equibop|vesktop to the communication workspace; add Legcord.
+-- A direct rule: the dots' tag definitions must follow every tagging, and this file loads last.
+hl.window_rule({ match = { class = "legcord" }, workspace = "special:communication" })
+
 -- Monitors
 hl.monitor({
   output = "desc:BNQ BenQ EL2870U R5M00386SL0",

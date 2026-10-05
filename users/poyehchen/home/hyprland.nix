@@ -33,6 +33,11 @@ in
         enableQt = false;
         enableBtop = false;
       };
+      # The communication toggle defaults to the official client; point it at Legcord.
+      toggles.communication.discord = {
+        match = [ { class = "legcord"; } ];
+        command = [ "legcord" ];
+      };
       # The CLI's default btop toggle launches foot, the default terminal (hypr-vars.lua).
     };
   };
