@@ -134,6 +134,15 @@
     enable = true;
     internalInterfaces = [ "wlp72s0" ];
     externalInterface = "enp73s0";
+    # WARP (modules/services.nix) routes forwarded traffic into its tunnel too: masquerade AP
+    # clients there and clamp TCP MSS to the tunnel's 1280 MTU.
+    extraCommands = ''
+      iptables -w -t nat -A nixos-nat-post -s 192.168.12.0/24 -o CloudflareWARP -j MASQUERADE
+      iptables -w -t mangle -A FORWARD -o CloudflareWARP -p tcp --tcp-flags SYN,RST SYN -j TCPMSS --clamp-mss-to-pmtu
+    '';
+    extraStopCommands = ''
+      iptables -w -t mangle -D FORWARD -o CloudflareWARP -p tcp --tcp-flags SYN,RST SYN -j TCPMSS --clamp-mss-to-pmtu 2>/dev/null || true
+    '';
   };
 
   time.timeZone = "Asia/Taipei";

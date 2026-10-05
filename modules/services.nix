@@ -1,9 +1,39 @@
 {
+  config,
   lib,
   pkgs,
   inputs,
   ...
 }:
+let
+  # WARP (below) and Proton VPN both take over routing: `protonvpn` pauses WARP while connected.
+  protonvpn = pkgs.writeShellApplication {
+    name = "protonvpn";
+    runtimeInputs = [ config.services.cloudflare-warp.package ];
+    text = ''
+      real=${lib.getExe pkgs.proton-vpn-cli}
+      # The subcommand is the first non-option argument (`protonvpn -v connect`).
+      cmd=""
+      for arg in "$@"; do
+        case "$arg" in
+          -*) ;;
+          *) cmd=$arg; break ;;
+        esac
+      done
+      case "$cmd" in
+        connect)
+          warp-cli disconnect
+          "$real" "$@" || { warp-cli connect; exit 1; }
+          ;;
+        disconnect)
+          "$real" "$@"
+          warp-cli connect
+          ;;
+        *) exec "$real" "$@" ;;
+      esac
+    '';
+  };
+in
 {
   virtualisation.podman = {
     enable = true;
@@ -12,7 +42,10 @@
   };
   # Resolve short image names (e.g. `podman pull alpine`) against Docker Hub.
   virtualisation.containers.registries.settings.unqualified-search-registries = [ "docker.io" ];
-  environment.systemPackages = [ pkgs.podman-compose ];
+  environment.systemPackages = [
+    pkgs.podman-compose
+    protonvpn
+  ];
 
   # Trash, MTP, SMB, etc. for Thunar; thumbnails.
   services.gvfs.enable = true;
@@ -78,9 +111,12 @@
         ];
         port = 53;
         upstream_dns = [
+          "tls://1.1.1.1"
+          "tls://1.0.0.1"
+        ];
+        bootstrap_dns = [
           "1.1.1.1"
           "8.8.8.8"
-          "9.9.9.9"
         ];
       };
       filters =
@@ -110,6 +146,12 @@
     "127.0.0.1"
     "::1"
   ];
+
+  # Cloudflare WARP for all traffic. Registration and mode are daemon state, set once:
+  #   warp-cli --accept-tos registration new
+  #   warp-cli mode tunnel_only   # tunnel everything; DNS stays on AdGuard Home
+  #   warp-cli connect            # persists across reboots
+  services.cloudflare-warp.enable = true;
 
   # Host networking: web UI/JSON-RPC (9000), CLI (9090), SlimProto player discovery (3483).
   networking.firewall = {

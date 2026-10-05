@@ -54,7 +54,6 @@ in
     tree-sitter
     nodejs
     asdf-vm
-    proton-vpn-cli
     # wl-clipboard-rs lacks `wl-paste --watch` (cliphist) until its next nixpkgs release.
     wl-clipboard
   ];
