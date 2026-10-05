@@ -2,7 +2,6 @@
   config,
   lib,
   pkgs,
-  inputs,
   ...
 }:
 let
@@ -62,19 +61,31 @@ in
     after = [ "pipewire.service" ];
     serviceConfig = {
       ExecStart = lib.escapeShellArgs [
-        (lib.getExe inputs.mprisqueeze.packages.${pkgs.stdenv.hostPlatform.system}.default)
-        "-p"
-        "smb374_nix"
-        "--"
         (lib.getExe pkgs.squeezelite)
         "-n"
-        "{name}"
+        "smb374_nix"
         "-s"
-        "{server}"
+        "127.0.0.1"
         "-o"
         "pipewire"
         "-Z"
         "384000"
+      ];
+      Restart = "on-failure";
+    };
+  };
+  # MPRIS bridge for the squeezelite player above (reports position and duration).
+  systemd.user.services.slimpris2 = {
+    description = "Squeezebox MPRIS remote control";
+    wantedBy = [ "graphical-session.target" ];
+    partOf = [ "graphical-session.target" ];
+    after = [ "squeezelite.service" ];
+    serviceConfig = {
+      ExecStart = lib.escapeShellArgs [
+        (lib.getExe (pkgs.callPackage ../pkgs/slimpris2.nix { }))
+        "127.0.0.1"
+        "9000"
+        "smb374_nix"
       ];
       Restart = "on-failure";
     };

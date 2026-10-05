@@ -29,7 +29,7 @@
     },
     "services": {
         "clockFormat": "TwentyFourHour",
-        "defaultPlayer": "squeezelite",
+        "defaultPlayer": "smb374_nix",
         "weatherUnits": "Celsius"
     }
 }
