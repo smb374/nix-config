@@ -64,7 +64,7 @@ in
       ExecStart = lib.escapeShellArgs [
         (lib.getExe inputs.mprisqueeze.packages.${pkgs.stdenv.hostPlatform.system}.default)
         "-p"
-        "squeezelite"
+        "smb374_nix"
         "--"
         (lib.getExe pkgs.squeezelite)
         "-n"
