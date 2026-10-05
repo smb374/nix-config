@@ -19,6 +19,7 @@
   services.gnome.gnome-keyring.enable = true;
   # Polkit agent as a user service; the dots' polkit-gnome exec uses an Arch path.
   security.soteria.enable = true;
+  security.rtkit.enable = true;
   services.power-profiles-daemon.enable = true;
   services.upower.enable = true;
 
@@ -38,6 +39,17 @@
     enable = true;
     alsa.enable = true;
     pulse.enable = true;
+    # Let the graph clock follow the stream's rate (e.g. squeezelite) instead of resampling.
+    extraConfig.pipewire."10-allowed-rates"."context.properties"."default.clock.allowed-rates" = [
+      44100
+      48000
+      88200
+      96000
+      176400
+      192000
+      352800
+      384000
+    ];
   };
 
   i18n.inputMethod = {
