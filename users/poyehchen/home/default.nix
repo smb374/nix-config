@@ -4,7 +4,6 @@
   config,
   lib,
   pkgs,
-  inputs,
   dotfiles,
   ...
 }:
@@ -22,12 +21,8 @@ in
   # Out-of-store root for stowed dotfiles: edits in the repo apply without a rebuild.
   _module.args.dotfiles = "${config.directory}/nix-config/dotfiles";
 
+  # CLI only: GUI apps need the host's GL drivers and live in ../default.nix (NixOS).
   packages = with pkgs; [
-    kitty
-    foot
-    brave-origin
-    inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.default
-
     # Dev
     gdb
     gef
@@ -49,7 +44,6 @@ in
     eza
     ffmpeg
     btop-rocm
-    imv
     imagemagick
     yq-go
     just
@@ -57,11 +51,9 @@ in
     nmon
     geoip
     geolite-legacy
-    lxqt.pavucontrol-qt
     tree-sitter
     nodejs
     asdf-vm
-    proton-vpn
     proton-vpn-cli
     # wl-clipboard-rs lacks `wl-paste --watch` (cliphist) until its next nixpkgs release.
     wl-clipboard

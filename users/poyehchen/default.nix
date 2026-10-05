@@ -19,6 +19,17 @@
       "tss"
       "ydotool"
     ];
+    # GUI apps: they need the system GL/Vulkan drivers, which only NixOS provides
+    # (standalone Hjem hosts would need NixGL). CLI tools stay in ./home.
+    packages = with pkgs; [
+      kitty
+      foot
+      brave-origin
+      inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.default
+      imv
+      lxqt.pavucontrol-qt
+      proton-vpn
+    ];
   };
 
   hjem.specialArgs = { inherit inputs; };

@@ -78,11 +78,8 @@
         ];
         port = 53;
         upstream_dns = [
-          "https://dns.cloudflare.com/dns-query"
-          "https://dns.quad9.net/dns-query"
-        ];
-        bootstrap_dns = [
           "1.1.1.1"
+          "8.8.8.8"
           "9.9.9.9"
         ];
       };
