@@ -63,6 +63,7 @@
   };
 
   fonts.packages = with pkgs; [
+    lxgw-wenkai-tc
     noto-fonts
     noto-fonts-cjk-sans
     noto-fonts-cjk-serif

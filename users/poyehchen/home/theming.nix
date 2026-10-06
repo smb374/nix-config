@@ -60,6 +60,22 @@ let
   # KDE color scheme for qtengine, laid out like the Caelestia CLI's qtdark.colors.
   qtColors = render "kde.colors";
   gtkCss = render "gtk.css";
+
+  # fcitx5 themes from catppuccin-fcitx5. One symlink per theme directory:
+  # ~/.local/share/fcitx5/themes stays a real directory, so local themes can sit beside them.
+  fcitx5Themes =
+    lib.mapAttrs'
+      (
+        name: _:
+        lib.nameValuePair "fcitx5/themes/${name}" {
+          source = "${pkgs.catppuccin-fcitx5}/share/fcitx5/themes/${name}";
+        }
+      )
+      (
+        lib.filterAttrs (_: type: type == "directory") (
+          builtins.readDir "${pkgs.catppuccin-fcitx5}/share/fcitx5/themes"
+        )
+      );
 in
 {
   environment.sessionVariables = {
@@ -119,4 +135,7 @@ in
       };
     };
   };
+
+  # Pick one in fcitx5's theme settings (fcitx5-configtool).
+  xdg.data.files = fcitx5Themes;
 }
