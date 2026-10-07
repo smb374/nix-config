@@ -58,6 +58,8 @@ in
     wl-clipboard
     gh
     xxd
+    yazi
+    doggo
   ];
 
   files = {

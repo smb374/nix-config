@@ -163,6 +163,6 @@
     htop
     procps
     traceroute
-    doggo
+    dnsutils
   ];
 }
