@@ -4,35 +4,6 @@
   pkgs,
   ...
 }:
-let
-  # WARP (below) and Proton VPN both take over routing: `protonvpn` pauses WARP while connected.
-  protonvpn = pkgs.writeShellApplication {
-    name = "protonvpn";
-    runtimeInputs = [ config.services.cloudflare-warp.package ];
-    text = ''
-      real=${lib.getExe pkgs.proton-vpn-cli}
-      # The subcommand is the first non-option argument (`protonvpn -v connect`).
-      cmd=""
-      for arg in "$@"; do
-        case "$arg" in
-          -*) ;;
-          *) cmd=$arg; break ;;
-        esac
-      done
-      case "$cmd" in
-        connect)
-          warp-cli disconnect
-          "$real" "$@" || { warp-cli connect; exit 1; }
-          ;;
-        disconnect)
-          "$real" "$@"
-          warp-cli connect
-          ;;
-        *) exec "$real" "$@" ;;
-      esac
-    '';
-  };
-in
 {
   virtualisation.podman = {
     enable = true;
@@ -43,7 +14,7 @@ in
   virtualisation.containers.registries.settings.unqualified-search-registries = [ "docker.io" ];
   environment.systemPackages = [
     pkgs.podman-compose
-    protonvpn
+    pkgs.proton-vpn-cli
   ];
 
   # Trash, MTP, SMB, etc. for Thunar; thumbnails.
@@ -149,6 +120,32 @@ in
             "https://adguardteam.github.io/HostlistsRegistry/assets/filter_21.txt" # CHN: AdRules DNS List
             "https://adguardteam.github.io/HostlistsRegistry/assets/filter_29.txt" # CHN: anti-AD
           ];
+      # GitHub's Fastly download domains publish no AAAA record, so a device
+      # with working IPv6 still downloads over HiNet's congested IPv4 path to
+      # Fastly. Supply the IPv6 addresses GitHub itself announces in
+      # 2606:50c0::/32. $dnstype=AAAA leaves A queries untouched, which keeps
+      # clients that have no IPv6 working. Remove this block once
+      # getent ahostsv6 release-assets.githubusercontent.com returns a native
+      # address instead of ::ffff:185.199.108.133.
+      user_rules =
+        lib.concatMap
+          (
+            host:
+            map (addr: "||${host}^$dnstype=AAAA,dnsrewrite=NOERROR;AAAA;${addr}") [
+              "2606:50c0:8000::154"
+              "2606:50c0:8001::154"
+              "2606:50c0:8002::154"
+              "2606:50c0:8003::154"
+            ]
+          )
+          [
+            "release-assets.githubusercontent.com"
+            "objects.githubusercontent.com"
+            "github-cloud.githubusercontent.com"
+            "gist.githubusercontent.com"
+            "private-user-images.githubusercontent.com"
+            "camo.githubusercontent.com"
+          ];
     };
   };
   # NetworkManager stops writing DHCP-provided DNS; resolv.conf points at AdGuard Home.
@@ -157,12 +154,6 @@ in
     "127.0.0.1"
     "::1"
   ];
-
-  # Cloudflare WARP for all traffic. Registration and mode are daemon state, set once:
-  #   warp-cli --accept-tos registration new
-  #   warp-cli mode tunnel_only   # tunnel everything; DNS stays on AdGuard Home
-  #   warp-cli connect            # persists across reboots
-  services.cloudflare-warp.enable = true;
 
   # Host networking: web UI/JSON-RPC (9000), CLI (9090), SlimProto player discovery (3483).
   networking.firewall = {

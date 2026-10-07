@@ -162,5 +162,7 @@
     nmon
     htop
     procps
+    traceroute
+    dogdns
   ];
 }
