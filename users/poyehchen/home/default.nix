@@ -60,6 +60,7 @@ in
     xxd
     yazi
     doggo
+    asciinema
   ];
 
   files = {
