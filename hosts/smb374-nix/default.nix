@@ -119,6 +119,18 @@
         DNS = [ "192.168.12.1" ];
       };
       linkConfig.RequiredForOnline = "no";
+      # WARP (modules/services.nix) adds one rule at priority 32765, "not from
+      # all fwmark 0x100cf lookup <warp table>", which sends every packet into
+      # its tunnel. This rule outranks it for AP clients, so they go out
+      # enp73s0 directly instead of through WARP's shared exit addresses.
+      routingPolicyRules = [
+        {
+          From = "192.168.12.0/24";
+          Family = "ipv4";
+          Priority = 1000;
+          Table = "main";
+        }
+      ];
     };
   };
   # Clients resolve through AdGuard Home on the gateway address.
@@ -134,15 +146,6 @@
     enable = true;
     internalInterfaces = [ "wlp72s0" ];
     externalInterface = "enp73s0";
-    # WARP (modules/services.nix) routes forwarded traffic into its tunnel too: masquerade AP
-    # clients there and clamp TCP MSS to the tunnel's 1280 MTU.
-    extraCommands = ''
-      iptables -w -t nat -A nixos-nat-post -s 192.168.12.0/24 -o CloudflareWARP -j MASQUERADE
-      iptables -w -t mangle -A FORWARD -o CloudflareWARP -p tcp --tcp-flags SYN,RST SYN -j TCPMSS --clamp-mss-to-pmtu
-    '';
-    extraStopCommands = ''
-      iptables -w -t mangle -D FORWARD -o CloudflareWARP -p tcp --tcp-flags SYN,RST SYN -j TCPMSS --clamp-mss-to-pmtu 2>/dev/null || true
-    '';
   };
 
   time.timeZone = "Asia/Taipei";

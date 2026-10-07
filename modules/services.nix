@@ -122,8 +122,8 @@ in
         ];
         port = 53;
         upstream_dns = [
-          "tls://1.1.1.1"
-          "tls://1.0.0.1"
+          "https://cloudflare-dns.com/dns-query"
+          "https://dns.google/dns-query"
         ];
         bootstrap_dns = [
           "1.1.1.1"

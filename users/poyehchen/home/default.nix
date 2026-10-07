@@ -56,6 +56,8 @@ in
     asdf-vm
     # wl-clipboard-rs lacks `wl-paste --watch` (cliphist) until its next nixpkgs release.
     wl-clipboard
+    gh
+    xxd
   ];
 
   files = {
