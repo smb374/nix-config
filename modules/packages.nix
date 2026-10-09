@@ -164,5 +164,6 @@
     procps
     traceroute
     dnsutils
+    libnotify
   ];
 }
