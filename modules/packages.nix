@@ -96,6 +96,7 @@
       pango
       pixman
       python3
+      raylib
       speex
       pipewire
       stdenv.cc.cc
@@ -165,5 +166,6 @@
     traceroute
     dnsutils
     libnotify
+    raylib
   ];
 }

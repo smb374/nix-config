@@ -61,6 +61,7 @@ in
     yazi
     doggo
     asciinema
+    devenv
   ];
 
   files = {
