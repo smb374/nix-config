@@ -33,13 +33,13 @@
 
   networking.hostName = "smb374-nix";
   networking.networkmanager.enable = true;
-  # wlp72s0 is dedicated to the access point; keep NetworkManager off it.
-  networking.networkmanager.unmanaged = [ "interface-name:wlp72s0" ];
+  # wlp7s0 is dedicated to the access point; keep NetworkManager off it.
+  networking.networkmanager.unmanaged = [ "interface-name:wlp7s0" ];
 
   # Wi-Fi 6 access point: 5 GHz channel 149 at 80 MHz (149-161, center 155), WPA2.
   services.hostapd = {
     enable = true;
-    radios.wlp72s0 = {
+    radios.wlp7s0 = {
       band = "5g";
       channel = 149;
       countryCode = "TW";
@@ -81,7 +81,7 @@
         vht_oper_centr_freq_seg0_idx = 155;
         he_oper_centr_freq_seg0_idx = 155;
       };
-      networks.wlp72s0 = {
+      networks.wlp7s0 = {
         ssid = "smb374-nix_AP";
         authentication = {
           mode = "wpa2-sha1";
@@ -103,8 +103,8 @@
     enable = true;
     # NetworkManager-wait-online already gates network-online.target.
     wait-online.enable = false;
-    networks."40-wlp72s0" = {
-      matchConfig.Name = "wlp72s0";
+    networks."40-wlp7s0" = {
+      matchConfig.Name = "wlp7s0";
       address = [ "192.168.12.1/24" ];
       networkConfig = {
         DHCPServer = true;
@@ -122,8 +122,8 @@
     };
   };
   # Clients resolve through AdGuard Home on the gateway address.
-  services.adguardhome.settings.dns.bind_hosts = [ "192.168.12.1" ];
-  networking.firewall.interfaces.wlp72s0 = {
+  services.adguardhome.settings.dns.bind_hosts = [ "0.0.0.0" "::1" ];
+  networking.firewall.interfaces.wlp7s0 = {
     allowedUDPPorts = [
       53 # DNS
       67 # DHCP
@@ -132,8 +132,7 @@
   };
   networking.nat = {
     enable = true;
-    internalInterfaces = [ "wlp72s0" ];
-    externalInterface = "enp73s0";
+    internalInterfaces = [ "wlp7s0" ];
   };
 
   time.timeZone = "Asia/Taipei";
