@@ -3,7 +3,7 @@
 
 set -gx SHELL (which fish)
 
-fish_add_path -pPm $HOME/.local/bin $HOME/.bun/bin $HOME/.cargo/bin $GOPATH/bin
+fish_add_path -pPm $HOME/.local/bin $HOME/.npm-global/bin $HOME/.bun/bin $HOME/.cargo/bin $GOPATH/bin
 
 # pure
 set -g pure_symbol_nixdevshell_prefix '󱄅'

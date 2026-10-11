@@ -37,6 +37,7 @@ in
     ols
     nil
     nixfmt-tree
+    typescript
 
     # CLI
     bat
@@ -94,6 +95,9 @@ in
       use-agent
       verify-options show-uid-validity
       with-fingerprint
+    '';
+    ".npmrc".text = ''
+      prefix=/home/poyehchen/.npm-global
     '';
   };
 

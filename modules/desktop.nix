@@ -100,7 +100,23 @@
 
   programs.steam = {
     enable = true;
-    gamescopeSession.enable = true;
+    # -steamos3 turns Big Picture's "Exit Big Picture" into "Switch to Desktop".
+    # Power off, restart and suspend already go through logind.
+    gamescopeSession = {
+      enable = true;
+      steamArgs = [
+        "-tenfoot"
+        "-pipewire-dmabuf"
+        "-steamos3"
+      ];
+    };
+    # Steam runs steamos-session-select for "Switch to Desktop". Quitting Steam ends
+    # gamescope and the session, so ly shows its login screen again.
+    extraPackages = [
+      (pkgs.writeShellScriptBin "steamos-session-select" "exec steam -shutdown")
+    ];
+    # Runs Windows tools (e.g. mod installers) inside one game's own Proton prefix.
+    protontricks.enable = true;
   };
   # No capSysNice: its ambient CAP_SYS_NICE breaks Steam's bwrap in the gamescope session.
   programs.gamescope.enable = true;
