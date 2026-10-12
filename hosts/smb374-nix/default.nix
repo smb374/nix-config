@@ -9,6 +9,16 @@
     ];
     trusted-users = [ "poyehchen" ];
   };
+  # nh: nixos-rebuild front end (diff + build tree). NH_FLAKE lets `nh os switch` run without a path.
+  # clean replaces nix.gc: weekly, keeps the last 3 generations and anything from the last 7 days.
+  programs.nh = {
+    enable = true;
+    flake = "/home/poyehchen/nix-config";
+    clean = {
+      enable = true;
+      extraArgs = "--keep 3 --keep-since 7d";
+    };
+  };
   nixpkgs.config.allowUnfree = true;
 
   boot.loader.limine = {
@@ -122,7 +132,10 @@
     };
   };
   # Clients resolve through AdGuard Home on the gateway address.
-  services.adguardhome.settings.dns.bind_hosts = [ "0.0.0.0" "::1" ];
+  services.adguardhome.settings.dns.bind_hosts = [
+    "0.0.0.0"
+    "::1"
+  ];
   networking.firewall.interfaces.wlp7s0 = {
     allowedUDPPorts = [
       53 # DNS

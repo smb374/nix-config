@@ -21,7 +21,7 @@ if status is-interactive
     alias pix="env PI_CODING_AGENT_DIR=$HOME/.pi/pix-agent pi"
 
     # Abbrs
-    abbr nrs 'sudo nixos-rebuild switch --flake ~/nix-config'
+    abbr nrs 'nh os switch'
     abbr lg lazygit
     abbr gd 'git diff'
     abbr ga 'git add .'
