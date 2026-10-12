@@ -63,6 +63,7 @@ in
     doggo
     asciinema
     devenv
+    herdr
   ];
 
   files = {
