@@ -142,6 +142,7 @@
     git
     wget
     lshw
+    worktrunk
 
     # Archives
     unrar

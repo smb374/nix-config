@@ -64,6 +64,7 @@ in
     asciinema
     devenv
     herdr
+    gopls
   ];
 
   files = {
