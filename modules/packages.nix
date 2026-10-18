@@ -143,6 +143,9 @@
     wget
     lshw
     worktrunk
+    got
+    yt-dlp
+    mpv
 
     # Archives
     unrar
@@ -168,5 +171,7 @@
     dnsutils
     libnotify
     raylib
+    proton-vpn-cli
+    proton-vpn
   ];
 }

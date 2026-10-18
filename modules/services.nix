@@ -14,7 +14,6 @@
   virtualisation.containers.registries.settings.unqualified-search-registries = [ "docker.io" ];
   environment.systemPackages = [
     pkgs.podman-compose
-    pkgs.proton-vpn-cli
   ];
 
   # Trash, MTP, SMB, etc. for Thunar; thumbnails.
