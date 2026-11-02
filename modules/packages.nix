@@ -66,7 +66,7 @@
       libjpeg
       libmikmod
       libogg
-      libpng12
+      libpng
       libgccjit
       libglvnd
       libnotify
