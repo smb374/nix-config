@@ -1,9 +1,9 @@
 -- Overrides for ~/.config/hypr/variables.lua (Caelestia dots); see that file for every key.
 return {
   -- Apps
-  terminal                   = "foot",
+  terminal                   = "kitty",
   browser                    = "zen-beta",
-  editor                     = "foot nvim",
+  editor                     = "kitty nvim",
   audioSettings              = "pavucontrol-qt",
 
   -- Matches the dconf cursor in users/poyehchen/default.nix.
