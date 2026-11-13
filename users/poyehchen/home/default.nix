@@ -22,50 +22,60 @@ in
   _module.args.dotfiles = "${config.directory}/nix-config/dotfiles";
 
   # CLI only: GUI apps need the host's GL drivers and live in ../default.nix (NixOS).
-  packages = with pkgs; [
-    # Dev
-    gdb
-    gef
-    clang
-    (lib.hiPrio gcc)
-    cmake
-    mold
-    uv
-    go
-    bun
-    odin
-    ols
-    nil
-    nixfmt-tree
-    typescript
+  packages =
+    with pkgs;
+    [
+      # Dev
+      gdb
+      gef
+      clang
+      (lib.hiPrio gcc)
+      cmake
+      mold
+      uv
+      go
+      bun
+      odin
+      ols
+      nil
+      nixfmt-tree
+      typescript
 
-    # CLI
-    bat
-    dua
-    eza
-    ffmpeg
-    btop-rocm
-    imagemagick
-    yq-go
-    just
-    nmap
-    nmon
-    geoip
-    geolite-legacy
-    tree-sitter
-    nodejs
-    asdf-vm
-    # wl-clipboard-rs lacks `wl-paste --watch` (cliphist) until its next nixpkgs release.
-    wl-clipboard
-    gh
-    xxd
-    yazi
-    doggo
-    asciinema
-    devenv
-    herdr
-    gopls
-  ];
+      # CLI
+      bat
+      dua
+      eza
+      ffmpeg
+      btop-rocm
+      imagemagick
+      yq-go
+      just
+      nmap
+      nmon
+      geoip
+      geolite-legacy
+      tree-sitter
+      nodejs
+      asdf-vm
+      # wl-clipboard-rs lacks `wl-paste --watch` (cliphist) until its next nixpkgs release.
+      wl-clipboard
+      gh
+      xxd
+      yazi
+      doggo
+      asciinema
+      devenv
+      herdr
+      gopls
+      regripper
+      bubblewrap
+      fence
+      socat
+      pfetch-rs
+      fastfetch
+      zk
+      hugo
+    ];
 
   files = {
     ".editorconfig".source = "${dotfiles}/editorconfig";

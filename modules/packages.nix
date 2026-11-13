@@ -173,5 +173,11 @@
     raylib
     proton-vpn-cli
     proton-vpn
+    ntfs3g
+    (python3.withPackages (pp: with pp; [
+      pyyaml
+      requests
+    ]))
+    rustup
   ];
 }

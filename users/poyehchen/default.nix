@@ -29,6 +29,7 @@
       imv
       lxqt.pavucontrol-qt
       legcord
+      obsidian
     ];
   };
 
