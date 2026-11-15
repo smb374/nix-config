@@ -86,13 +86,12 @@
     settings = {
       dns = {
         bind_hosts = [
-          "127.0.0.1"
-          "0:0:0:0:0:0:0:1"
+          "0.0.0.0"
+          "0:0:0:0:0:0:0:0"
         ];
         port = 53;
         upstream_dns = [
           "https://cloudflare-dns.com/dns-query"
-          "https://dns.google/dns-query"
         ];
         bootstrap_dns = [
           "1.1.1.1"
