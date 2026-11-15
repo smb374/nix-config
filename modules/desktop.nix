@@ -89,7 +89,11 @@
 
   # Theming: colors come from the Basix scheme in users/poyehchen/theming.nix.
   qt.enable = true;
-  environment.variables.QT_QPA_PLATFORMTHEME = "qtengine";
+  environment.variables = {
+    QT_QPA_PLATFORMTHEME = "qtengine";
+    NIXOS_OZONE_WL = "1";
+    PROTON_ENABLE_WAYLAND=1;
+  };
   environment.systemPackages = with pkgs; [
     adw-gtk3
     papirus-icon-theme
@@ -106,6 +110,10 @@
     hyprpicker
     gammastep
   ];
+  environment.etc."tmpfiles.d/tmp.conf".text = ''
+    q /tmp 1777 root root 1d
+    q /var/tmp 1777 root root 5d
+  '';
 
   programs.thunar = {
     enable = true;
@@ -138,6 +146,7 @@
     enableWsi = true;
     capSysNice = false;
   };
+  programs.gamemode.enable = true;
 
   programs.obs-studio = {
     enable = true;

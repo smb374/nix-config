@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ lib, pkgs, ... }:
 {
   imports = [ ./hardware.nix ];
 
@@ -131,11 +131,6 @@
       linkConfig.RequiredForOnline = "no";
     };
   };
-  # Clients resolve through AdGuard Home on the gateway address.
-  services.adguardhome.settings.dns.bind_hosts = [
-    "0.0.0.0"
-    "::1"
-  ];
   networking.firewall.interfaces.wlp7s0 = {
     allowedUDPPorts = [
       53 # DNS

@@ -179,5 +179,6 @@
       requests
     ]))
     rustup
+    protonup-rs
   ];
 }

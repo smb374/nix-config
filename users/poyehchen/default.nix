@@ -30,6 +30,7 @@
       lxqt.pavucontrol-qt
       legcord
       obsidian
+      emacs-pgtk
     ];
   };
 

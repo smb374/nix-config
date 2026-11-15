@@ -83,12 +83,11 @@
   # Listens on loopback only (podman's aardvark-dns owns :53 on its bridge).
   services.adguardhome = {
     enable = true;
-    host = "127.0.0.1"; # web UI: http://127.0.0.1:3000
     settings = {
       dns = {
         bind_hosts = [
           "127.0.0.1"
-          "::1"
+          "0:0:0:0:0:0:0:1"
         ];
         port = 53;
         upstream_dns = [
