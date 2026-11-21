@@ -174,11 +174,24 @@
     proton-vpn-cli
     proton-vpn
     ntfs3g
-    (python3.withPackages (pp: with pp; [
-      pyyaml
-      requests
-    ]))
+    (python3.withPackages (
+      pp: with pp; [
+        pyyaml
+        requests
+      ]
+    ))
     rustup
     protonup-rs
+    gnumake
+    lsof
+
+    (hunspell.withDicts (
+      dicts: with dicts; [
+        en_AU
+        en_CA
+        en_GB-ise
+        en_US
+      ]
+    ))
   ];
 }
