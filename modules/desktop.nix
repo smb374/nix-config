@@ -2,20 +2,6 @@
 {
   services.displayManager.ly.enable = true;
 
-  # Gear Lever update fix: https://github.com/mhx/dwarfs/pull/391. Drop once nixpkgs ships it.
-  nixpkgs.overlays = [
-    (final: prev: {
-      dwarfs = prev.dwarfs.overrideAttrs (old: {
-        patches = (old.patches or [ ]) ++ [
-          (final.fetchpatch {
-            url = "https://github.com/mhx/dwarfs/pull/391.patch";
-            hash = "sha256-iB8Nn0xPQrGwuEzvcR8BKxcAG9yd5sDPB67nQ6UdMMs=";
-          })
-        ];
-      });
-    })
-  ];
-
   # Hyprland + Caelestia shell. The shell starts from the dots' Hyprland config.
   # UWSM gives a systemd graphical session: user services and XDG autostart (fcitx5) run there.
   programs.hyprland = {

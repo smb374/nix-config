@@ -1,4 +1,4 @@
-{ lib, pkgs, ... }:
+{ pkgs, inputs, ... }:
 {
   imports = [ ./hardware.nix ];
 
@@ -8,6 +8,9 @@
       "flakes"
     ];
     trusted-users = [ "poyehchen" ];
+    # Binary cache for nix-cachyos-kernel. Must be active before the kernel switch.
+    extra-substituters = [ "https://cache.lantian.pub/lantian" ];
+    extra-trusted-public-keys = [ "lantian:WVGO7vsRMSEN+h7Lp7kv6SAmrkEXgUGbbXm7jMDjBuQ=" ];
   };
   # nh: nixos-rebuild front end (diff + build tree). NH_FLAKE lets `nh os switch` run without a path.
   # clean replaces nix.gc: weekly, keeps the last 3 generations and anything from the last 7 days.
@@ -34,7 +37,8 @@
     '';
   };
   boot.loader.efi.canTouchEfiVariables = true;
-  boot.kernelPackages = pkgs.linuxPackages_latest;
+  nixpkgs.overlays = [ inputs.nix-cachyos-kernel.overlays.pinned ];
+  boot.kernelPackages = pkgs.cachyosKernels.linuxPackages-cachyos-latest-lto-zen4;
   # Wi-Fi regulatory domain: Taiwan. The global default (00) marks all 5 GHz channels no-IR,
   # which blocks AP mode there.
   boot.extraModprobeConfig = ''
