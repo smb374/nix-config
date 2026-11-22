@@ -2,6 +2,7 @@
   config,
   lib,
   pkgs,
+  inputs,
   ...
 }:
 {
@@ -14,7 +15,17 @@
   virtualisation.containers.registries.settings.unqualified-search-registries = [ "docker.io" ];
   environment.systemPackages = [
     pkgs.podman-compose
+    pkgs.wl-clipboard # Waydroid clipboard sharing
+    # ARM translation (libhoudini/libndk): run `sudo waydroid_script`.
+    inputs.waydroid-script.packages.${pkgs.stdenv.hostPlatform.system}.default
   ];
+
+  virtualisation.waydroid = {
+    enable = true;
+    # Newer kernels (CachyOS latest) need the nftables build.
+    package = pkgs.waydroid-nftables;
+  };
+  networking.firewall.trustedInterfaces = [ "waydroid0" ];
 
   # Trash, MTP, SMB, etc. for Thunar; thumbnails.
   services.gvfs.enable = true;
@@ -80,14 +91,16 @@
     "d /var/lib/lms/playlist 0755 root root -"
   ];
   # Local DNS resolver with ad blocking; this host's only nameserver.
-  # Listens on loopback only (podman's aardvark-dns owns :53 on its bridge).
+  # Binds specific addresses, not a wildcard: Waydroid's dnsmasq needs :53 on 192.168.240.1,
+  # and podman's aardvark-dns owns :53 on its bridge.
   services.adguardhome = {
     enable = true;
     settings = {
       dns = {
         bind_hosts = [
-          "0.0.0.0"
-          "0:0:0:0:0:0:0:0"
+          "127.0.0.1"
+          "::1"
+          "192.168.12.1" # hotspot (wlp7s0), see hosts/smb374-nix/default.nix
         ];
         port = 53;
         upstream_dns = [

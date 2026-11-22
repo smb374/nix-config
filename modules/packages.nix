@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, inputs, ... }:
 
 {
   # Run unpatched, dynamically linked binaries (prebuilt tools, language-server downloads, ...).
@@ -140,6 +140,7 @@
   environment.systemPackages = with pkgs; [
     neovim
     git
+    rom # output monitor used by nh
     wget
     lshw
     worktrunk
@@ -193,5 +194,6 @@
         en_US
       ]
     ))
+    inputs.nix-auth.packages.${pkgs.stdenv.hostPlatform.system}.default
   ];
 }

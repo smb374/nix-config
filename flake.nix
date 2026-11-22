@@ -22,6 +22,11 @@
       flake = false;
     };
     nix-cachyos-kernel.url = "github:xddxdd/nix-cachyos-kernel/release";
+    waydroid-script = {
+      url = "github:casualsnek/waydroid_script";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    nix-auth.url = "github:numtide/nix-auth";
   };
 
   outputs =
