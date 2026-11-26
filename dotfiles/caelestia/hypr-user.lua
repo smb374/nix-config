@@ -29,3 +29,45 @@ hl.bind("SUPER + mouse_left", hl.dsp.layout("focus l"))
 hl.bind("SUPER + mouse_right", hl.dsp.layout("focus r"))
 hl.bind("SUPER + SHIFT + mouse_up", hl.dsp.layout("focus l"))
 hl.bind("SUPER + SHIFT + mouse_down", hl.dsp.layout("focus r"))
+
+-- Screenshots with grim, replacing the dots' shell UI (its save button does not work).
+-- `pick` is shell code that sets grim's arguments with `set --`, or exits to cancel.
+-- Each shot is saved to ~/Pictures/Screenshots/<date>.<kind>.png and copied to the clipboard.
+local function shot(kind, pick)
+  return hl.dsp.exec_cmd("sh -c '\n" .. pick .. [[
+
+  dir="$HOME/Pictures/Screenshots"
+  mkdir -p "$dir"
+  f="$dir/$(date +%F_%T).]] .. kind .. [[.png"
+  grim "$@" "$f" && wl-copy < "$f"
+']])
+end
+
+local pick_all = "set --"
+local pick_output = [[set -- -o "$(hyprctl monitors -j | jq -r ".[] | select(.focused).name")"]]
+local pick_region = [[geom=$(slurp) || exit 0; set -- -g "$geom"]]
+-- hyprpicker freezes the screen under slurp; it is killed once the selection is done.
+local pick_freeze = [[
+  hyprpicker -r -z & p=$!
+  sleep 0.3
+  geom=$(slurp)
+  kill $p
+  [ -n "$geom" ] || exit 0
+  set -- -g "$geom"]]
+-- Visible windows only: mapped, not hidden, on a visible workspace.
+local pick_window = [[
+  ws=$(hyprctl monitors -j | jq "[.[].activeWorkspace.id, (.[].specialWorkspace.id | select(. != 0))]")
+  geom=$(hyprctl clients -j \
+    | jq -r --argjson ws "$ws" ".[] | select(.mapped and (.hidden | not) and ([.workspace.id] | inside(\$ws))) | \"\(.at[0]),\(.at[1]) \(.size[0])x\(.size[1])\"" \
+    | slurp -r) || exit 0
+  set -- -g "$geom"]]
+
+for _, key in ipairs({ "Print", "CTRL + Print", "SUPER + SHIFT + S", "SUPER + SHIFT + ALT + S" }) do
+  hl.unbind(key)
+end
+hl.bind("Print", shot("full", pick_all), { locked = true })
+hl.bind("CTRL + Print", shot("output", pick_output), { locked = true })
+hl.bind("SUPER + SHIFT + S", shot("region", pick_freeze))
+hl.bind("SUPER + SHIFT + ALT + S", shot("region", pick_region))
+hl.unbind("SUPER + SHIFT + W")
+hl.bind("SUPER + SHIFT + W", shot("select", pick_window))

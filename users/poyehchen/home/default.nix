@@ -46,6 +46,9 @@ in
       dua
       eza
       ffmpeg
+      grim
+      slurp
+      hyprpicker
       btop-rocm
       imagemagick
       yq-go
